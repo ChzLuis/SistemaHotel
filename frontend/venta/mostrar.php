@@ -13,7 +13,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 		<!-- Meta -->
-		<meta name="description" content="Hotel MI CIELO">
+		<meta name="description" content="Hotel El Libertador">
 		<meta name="author" content="Hotel">
 		<link rel="shortcut icon" href="../../backend/img/ico.png" />
 
@@ -57,7 +57,7 @@
 				<!-- Sidebar brand start  -->
 				<div class="sidebar-brand">
 					<a href="../administrador/escritorio.php" class="logo">
-						<img src="../../backend/img/rt.png" alt="Hotel mi cielo" />
+						<img src="../../backend/img/rt.png" alt="Hotel El Libertador" />
 					</a>
 				</div>
 				<!-- Sidebar brand end  -->

@@ -34,7 +34,7 @@ function Footer()
         $this->Cell(95,5,utf8_decode('Página ').$this->PageNo().' / {nb}',0,0,'L');
         $this->Cell(180,5,date('d/m/Y | g:i:a') ,00,1,'R');
         $this->Line(10,287,200,287);
-        $this->Cell(0,5,utf8_decode("Hotel MI CIELO © Todos los derechos reservados."),0,0,"C");
+        $this->Cell(0,5,utf8_decode("Hotel El Libertador © Todos los derechos reservados."),0,0,"C");
         
 }
 }

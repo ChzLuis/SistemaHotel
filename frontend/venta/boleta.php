@@ -19,12 +19,11 @@ class PDF extends FPDF
     
     $this->SetFont('times', 'B', 13);
     
-    $this->Text(75, 15, utf8_decode('NOMBRE EMPRESA Hotel MI CIELO'));
-    $this->Text(77, 21, utf8_decode('6ª av. Los Angeles, California'));
-    $this->Text(88,27, utf8_decode('Tel: 7785-8223'));
-    $this->Text(78,33, utf8_decode('hotelmicielo@gmail.com'));
+    $this->Text(75, 15, utf8_decode('NOMBRE EMPRESA Hotel EL LIBERTADOR'));
+    $this->Text(77, 21, utf8_decode('Lima, Peru'));
+    $this->Text(88,27, utf8_decode('Tel: 999-999-999'));
+    $this->Text(78,33, utf8_decode('hotellibertador@gmail.com'));
     
-    $this->Image('../../backend/img/ico.png',160,5,33);
 
 
 //información de # de factura
@@ -59,7 +58,7 @@ function Footer()
         $this->Cell(95,5,utf8_decode('Página ').$this->PageNo().' / {nb}',0,0,'L');
         $this->Cell(95,5,date('d/m/Y | g:i:a') ,00,1,'R');
         $this->Line(10,287,200,287);
-        $this->Cell(0,5,utf8_decode("Mi_cielo © Todos los derechos reservados."),0,0,"C");
+        $this->Cell(0,5,utf8_decode("El_Libertador © Todos los derechos reservados."),0,0,"C");
         
 }
 
@@ -86,11 +85,8 @@ $pdf->setY(60);$pdf->setX(135);
    
     $pdf->SetFont('Arial','',10);
 
-    //Aqui inicia el for con todos los productos
-
+    //Aqui inicia el for con todos los producto
     
-
-
     require '../../backend/config/Conexion.php';
     $id = $_GET['id'];
     $stmt = $connect->prepare("SELECT orders.idord, clientes.iddn, clientes.dnic, clientes.numc, clientes.nomc, clientes.apec, orders.method, orders.total_products, orders.total_price, orders.placed_on, orders.tipc ,orders.payment_status FROM orders INNER JOIN clientes ON orders.user_cli = clientes.iddn WHERE orders.idord= '$id'");
@@ -106,7 +102,7 @@ while($row = $stmt->fetch()){
 
 
 
-//// Apartir de aqui esta la tabla con los subtotales y totales
+////  subtotales y totales
 
         $pdf->Ln(10);
 

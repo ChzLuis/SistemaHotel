@@ -321,6 +321,7 @@
 														<option>Seleccione rol</option>
 														<option value="1">Administrador</option>
 														<option value="2">Cliente</option>
+														<option value="3">Cajero</option>
 													
 												</select>
 												</div>

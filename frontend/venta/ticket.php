@@ -12,7 +12,7 @@ $pdf->SetFont('Arial','B',8);
 
 $pdf->setY(5);
 $pdf->setX(15);
-$pdf->Cell(50,$ancho,"Hotel MI CIELO",'B',0,'C');
+$pdf->Cell(50,$ancho,"Hotel El Libertador",'B',0,'C');
 $pdf->Ln(6);
 $pdf->SetFont('Arial','',7);   
 
