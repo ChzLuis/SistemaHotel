@@ -5,18 +5,18 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] != 1) {
 	header('location: ../login.php');
 }
 ?>
- <style>
-        .btn1 {
-			padding: 10px 20px;
-            font-size: 16px;
-            background-color: red;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-bottom: 20px;
-        }
-    </style>
+<style>
+	.btn1 {
+		padding: 10px 20px;
+		font-size: 16px;
+		background-color: red;
+		color: white;
+		border: none;
+		border-radius: 5px;
+		cursor: pointer;
+		margin-bottom: 20px;
+	}
+</style>
 
 <!doctype html>
 <html lang="es">

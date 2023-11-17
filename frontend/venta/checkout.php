@@ -355,8 +355,10 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] != 1) {
 											<div class="form-group">
 												<select class="form-control" name="cxtcre" required="true">
 													<option selected value="0">Seleccione método</option>
-													<option value="Credito pago">Crédito pago</option>
-													<option value="Tarjetas">Tarjetas</option>
+													<option value="Efectivo">Efectivo</option>
+													<option value="Yape">Yape</option>
+													<option value="PLin">Plin</option>
+													<option value="Tarjetas">Tarjeta Credito - Debito</option>
 												</select>
 											</div>
 										</div>
