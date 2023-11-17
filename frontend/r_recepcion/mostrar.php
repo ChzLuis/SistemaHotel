@@ -5,6 +5,19 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] != 1) {
 	header('location: ../login.php');
 }
 ?>
+ <style>
+        .btn1 {
+			padding: 10px 20px;
+            font-size: 16px;
+            background-color: red;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+    </style>
+
 <!doctype html>
 <html lang="es">
 
@@ -282,31 +295,37 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] != 1) {
 			<div class="main-container">
 				<div class="row gutters">
 					<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-						<div class="table-container">
-							<div class="t-header">Reporte recepción</div>
-							<div class="documents-header">
 
+						<h3>Selecciona una opción:</h3>
 
+						<button class="btn1" onclick="mostrarReservas()">Reservas</button>
+						<button class="btn1" onclick="mostraRecibos()">Recibos de Cliente</button>
 
-								<button onclick="descargarPDF()" class="btn btn-success">
-									<i class="fas fa-file-pdf"></i> Exportar a PDF
-								</button>
+						<div id="tabla" style="display:none;">
+							<div class="table-container">
+								<div class="t-header">Reporte de Reservas</div>
+								<div class="documents-header">
+									<!-- Botón "Reservas" -->
+									<button onclick="descargarPDF()" class="btn btn-success">
+										<i class="fas fa-file-pdf"></i> Exportar a PDF
+									</button>
 
-								<button id="btnExportarExcel" class="btn btn-success">
-									<i class="fas fa-file-excel"></i> Exportar a Excel
-								</button>
+									<button id="btnExportarExcel" class="btn btn-success">
+										<i class="fas fa-file-excel"></i> Exportar a Excel
+									</button>
 
-							</div>
-							<div class="table-responsive">
+								</div>
+								<div class="table-responsive">
 
-								<?php
-								require_once('../../backend/config/Conexion.php');
-								$sentencia = $connect->prepare("SELECT
+									<?php
+									require_once('../../backend/config/Conexion.php');
+									$sentencia = $connect->prepare("SELECT
 								clientes.iddn,
 								clientes.nomc,
 								habitaciones.numiha,
 								habitaciones.detaha,
 								habitaciones.precha,
+								reservar.adel,
 								reservar.fecha_ingreso,
 								reservar.feentra,
 								reservar.fesal
@@ -315,55 +334,136 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] != 1) {
 							JOIN clientes ON reservar.iddn = clientes.iddn
 							JOIN habitaciones ON reservar.idhab = habitaciones.idhab;
 							");
-								$sentencia->execute();
-								$data =  array();
-								if ($sentencia) {
-									while ($r = $sentencia->fetchObject()) {
-										$data[] = $r;
+									$sentencia->execute();
+									$data =  array();
+									if ($sentencia) {
+										while ($r = $sentencia->fetchObject()) {
+											$data[] = $r;
+										}
 									}
-								}
-								?>
-								<?php if (count($data) > 0) : ?>
+									?>
+									<?php if (count($data) > 0) : ?>
 
-									<table id="tabla" class="table custom-table">
-										<thead>
-											<tr>
-												<th>Cliente</th>
-												<th>Número de la habitación</th>
-												<th>Detalle de la habitación</th>
-												<th>Precio de la habitación</th>
-												<th>Fecha de Reserva</th>
-												<th>Fecha de Ingreso</th>
-												<th>Fecha de Salida</th>
-											</tr>
-										</thead>
-
-										<tbody>
-											<?php foreach ($data as $d) : ?>
+										<table id="tabla" class="table custom-table">
+											<thead>
 												<tr>
-
-													<td><?php echo $d->nomc ?></td>
-													<td><?php echo $d->numiha ?></td>
-													<td><?php echo $d->detaha ?></td>
-													<td>S/.<?php echo $d->precha ?></td>
-													<td><?php echo $d->fecha_ingreso ?></td>
-													<td><?php echo $d->feentra ?></td>
-													<td><?php echo $d->fesal ?></td>
-													<td>
-														<button onclick="imprimirRecibo(<?php echo $d->numiha ?>, '<?php echo $d->nomc ?>')">Imprimir Recibo</button>
-													</td>
+													<th>Cliente</th>
+													<th>Número de la habitación</th>
+													<th>Detalle de la habitación</th>
+													<th>Precio de la habitación</th>
+													<th>Fecha de Reserva</th>
+													<th>Fecha de Ingreso</th>
+													<th>Fecha de Salida</th>
 												</tr>
+											</thead>
 
-											<?php endforeach; ?>
-										</tbody>
+											<tbody>
+												<?php foreach ($data as $d) : ?>
+													<tr>
 
-									</table>
-								<?php else : ?>
-									<p class="alert alert-warning">No hay registros</p>
-								<?php endif; ?>
+														<td><?php echo $d->nomc ?></td>
+														<td><?php echo $d->numiha ?></td>
+														<td><?php echo $d->detaha ?></td>
+														<td>S/.<?php echo $d->precha ?></td>
+														<td><?php echo $d->fecha_ingreso ?></td>
+														<td><?php echo $d->feentra ?></td>
+														<td><?php echo $d->fesal ?></td>
+													</tr>
+
+												<?php endforeach; ?>
+											</tbody>
+
+										</table>
+									<?php else : ?>
+										<p class="alert alert-warning">No hay registros</p>
+									<?php endif; ?>
+								</div>
 							</div>
+
+
+
+						</div>
+
+
+						<div id="tabla1" style="display:none;">
+							<div class="table-container">
+								<div class="t-header">Reporte de Recibos</div>
+								<div class="documents-header">
+									<!-- Botón "Reservas" -->
+								</div>
+								<div class="table-responsive">
+
+									<?php
+									require_once('../../backend/config/Conexion.php');
+									$sentencia = $connect->prepare("SELECT
+								clientes.iddn,
+								clientes.nomc,
+								habitaciones.numiha,
+								habitaciones.detaha,
+								habitaciones.precha,
+								reservar.adel,
+								reservar.fecha_ingreso,
+								reservar.feentra,
+								reservar.fesal
+							FROM
+								reservar
+							JOIN clientes ON reservar.iddn = clientes.iddn
+							JOIN habitaciones ON reservar.idhab = habitaciones.idhab;
+							");
+									$sentencia->execute();
+									$data =  array();
+									if ($sentencia) {
+										while ($r = $sentencia->fetchObject()) {
+											$data[] = $r;
+										}
+									}
+									?>
+									<?php if (count($data) > 0) : ?>
+
+										<table id="tabla" class="table custom-table">
+											<thead>
+												<tr>
+													<th>Cliente</th>
+													<th>Número de la habitación</th>
+													<th>Detalle de la habitación</th>
+													<th>Precio de la habitación</th>
+													<th>Fecha de Reserva</th>
+													<th>Fecha de Ingreso</th>
+													<th>Fecha de Salida</th>
+												</tr>
+											</thead>
+
+											<tbody>
+												<?php foreach ($data as $d) : ?>
+													<tr>
+
+														<td><?php echo $d->nomc ?></td>
+														<td><?php echo $d->numiha ?></td>
+														<td><?php echo $d->detaha ?></td>
+														<td>S/.<?php echo $d->precha ?></td>
+														<td><?php echo $d->fecha_ingreso ?></td>
+														<td><?php echo $d->feentra ?></td>
+														<td><?php echo $d->fesal ?></td>
+														<td>
+															<button class="btn btn-success" onclick="imprimirRecibo(<?php echo $d->numiha ?>, '<?php echo $d->nomc ?>')">PDF</button>
+														</td>
+													</tr>
+
+												<?php endforeach; ?>
+											</tbody>
+
+										</table>
+									<?php else : ?>
+										<p class="alert alert-warning">No hay registros</p>
+									<?php endif; ?>
+								</div>
+							</div>
+
+
+
 						</div>
 					</div>
+
 				</div>
 			</div>
 
@@ -376,6 +476,19 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] != 1) {
 	<!-- Page wrapper end -->
 
 	<!-- MODAL-ELIMINAR -->
+	<script>
+		function mostrarReservas() {
+			// Ocultar tabla de reservas y mostrar tabla de recibos
+			document.getElementById("tabla1").style.display = "none";
+			document.getElementById("tabla").style.display = "block";
+		}
+	</script>
+	<script>
+		function mostraRecibos() {
+			document.getElementById("tabla").style.display = "none";
+			document.getElementById("tabla1").style.display = "block";
+		}
+	</script>
 
 
 	<script>

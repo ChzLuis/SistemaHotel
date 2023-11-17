@@ -79,6 +79,15 @@ $pdf->Cell(30, 10, utf8_decode($d->fecha_ingreso), 1);
 $pdf->Cell(30, 10, utf8_decode($d->feentra), 1);
 $pdf->Cell(30, 10, utf8_decode($d->fesal), 1);
 
+$pdf->Cell(0, 10, '', 0, 1);
+
+// Total y Monto
+$pdf->SetFont('Arial', 'B', 14);
+$pdf->Cell(40, 10, utf8_decode('Total'), 0, 0);
+$pdf->Cell(40, 10, utf8_decode('Monto'), 0, 1);
+$pdf->SetFont('Arial', '', 12);
+$pdf->Cell(40, 10, utf8_decode(''), 0, 0); // Celda vacía para Total
+$pdf->Cell(40, 10, utf8_decode(''), 0, 1); // Celda vacía para Monto
 
 
 // Nombre del archivo PDF
@@ -86,4 +95,3 @@ $nombreArchivo = 'Recibo_Habitacion_' . $d->numiha . '.pdf';
 
 // Salida del PDF al navegador
 $pdf->Output($nombreArchivo, 'D');
-?>

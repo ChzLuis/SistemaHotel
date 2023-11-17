@@ -19,7 +19,7 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] != 1) {
 	<link rel="shortcut icon" href="../../backend/img/ico.png" />
 
 	<!-- Title -->
-	<title>Finalizar compra | Hotel "El Libertador"</title>
+	<title>Reporte recepción | Hotel "El Libertador"</title>
 
 
 	<!-- *************
@@ -40,15 +40,18 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] != 1) {
 	<!-- Notify -->
 	<link rel="stylesheet" href="../../backend/vendor/notify/notify-flat.css" />
 
+	<!-- EXPORTAR EXCEL -->
+	<script src="https://unpkg.com/xlsx@0.16.9/dist/xlsx.full.min.js"></script>
+	<script src="https://unpkg.com/file-saverjs@latest/FileSaver.min.js"></script>
+	<script src="https://unpkg.com/tableexport@latest/dist/js/tableexport.min.js"></script>
+
+	<!-- EXPORTAR EN PDF -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>
+
+
 </head>
 
 <body>
-
-	<!-- Loading starts -->
-
-	<!-- Loading ends -->
-
-
 	<!-- Page wrapper start -->
 	<div class="page-wrapper">
 
@@ -104,7 +107,7 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] != 1) {
 						</li>
 
 
-						<li class="sidebar-dropdown active">
+						<li class="sidebar-dropdown">
 							<a href="#">
 								<i class="icon-archive"></i>
 								<span class="menu-text">Tienda</span>
@@ -112,7 +115,7 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] != 1) {
 							<div class="sidebar-submenu">
 								<ul>
 									<li>
-										<a href="../venta/mostrar.php" class="current-page">Vender</a>
+										<a href="../venta/mostrar.php">Vender</a>
 									</li>
 									<li>
 										<a href="../productos/mostrar.php">Productos</a>
@@ -146,7 +149,7 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] != 1) {
 							</div>
 						</li>
 
-						<li class="sidebar-dropdown">
+						<li class="sidebar-dropdown active">
 							<a href="#">
 								<i class="icon-bar-chart"></i>
 								<span class="menu-text">Reportes</span>
@@ -154,7 +157,7 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] != 1) {
 							<div class="sidebar-submenu">
 								<ul>
 									<li>
-										<a href="../r_recepcion/mostrar.php">Recepción</a>
+										<a href="../r_recepcion/mostrar.php" class="current-page">Recepción</a>
 									</li>
 									<li>
 										<a href="../r_productos/mostrar.php">Productos</a>
@@ -270,111 +273,99 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] != 1) {
 			<div class="page-header">
 				<ol class="breadcrumb">
 					<li class="breadcrumb-item">Home</li>
-					<li class="breadcrumb-item active">Ventas de nuevos productos</li>
+					<li class="breadcrumb-item active">Reportes recepción</li>
 				</ol>
 			</div>
 			<!-- Page header end -->
 			<!-- Main container start -->
 
 			<div class="main-container">
-
-
-				<section class="display-orders">
-
-					<?php
-					require_once('../../backend/config/Conexion.php');
-					$user_id = $_SESSION['id'];
-					$cart_grand_total = 0;
-					$select_cart_items = $connect->prepare("SELECT cart.idv, usuarios.id, usuarios.nombre, usuarios.usuario, productos.idprd, productos.nomprd, productos.numprd, productos.detprd, productos.preprd, productos.foto,productos.stckprd, cart.name, cart.price, cart.quantity FROM cart INNER JOIN usuarios ON cart.user_id = usuarios.id INNER JOIN productos ON cart.idprd = productos.idprd WHERE user_id = ?");
-					$select_cart_items->execute([$user_id]);
-					if ($select_cart_items->rowCount() > 0) {
-						while ($fetch_cart_items = $select_cart_items->fetch(PDO::FETCH_ASSOC)) {
-							$cart_total_price = ($fetch_cart_items['preprd'] * $fetch_cart_items['quantity']);
-							$cart_grand_total += $cart_total_price;
-					?>
-							<p> <?= $fetch_cart_items['name']; ?> <span>(<?= 'S/' . $fetch_cart_items['preprd'] . '/- x ' . $fetch_cart_items['quantity']; ?>)</span> </p>
-					<?php
-						}
-					} else {
-						echo '<p class="empty"><p class="alert alert-warning">Tu carrito esta vació</p></p>';
-					}
-					?>
-					<div class="grand-total">grand total : <span>S/<?php echo number_format($cart_grand_total, 2); ?></span></div>
-
-
-				</section>
-
-
-				<!-- Row start -->
-				<div class="row justify-content-center gutters">
-					<div class="col-xl-7 col-lg-7 col-md-8 col-sm-10">
-						<form enctype="multipart/form-data" method="POST" action="" autocomplete="off">
-							<div class="card m-0">
-								<div class="card-header">
-									<div class="card-title">Finalizar compra</div>
-
-								</div>
-								<div class="card-body">
-									<div class="row gutters">
-										<?php
-										//require_once('../../backend/config/Conexion.php'); 
-										//$last=[];
-										//$sth = $connect->prepare("select LAST_INSERT_ID(idord) as last from orders order by idord desc LIMIT 0,1");
-										//$sth->execute();
-										/* Fetch all of the remaining rows in the result set */
-										//$result = $sth->fetchAll();
-										//$numero=$result['last']+1;
-										/*print_r($result);*/
-										?>
-										<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-											<div class="form-group">
-												<select class="form-control" name="cxcom" required="true">
-													<option selected value="0">Seleccione comprobante</option>
-													<option value="Boleta">Boleta</option>
-													<option value="Ticket">Ticket</option>
-												</select>
-											</div>
-										</div>
-
-
-										<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-											<div class="form-group">
-												<input type="hidden" name="pdrus" value="<?php echo $_SESSION['id']; ?>">
-												<select class="form-control required" name="cxtip" id="cli" required="true">
-													<option>Seleccione cliente</option>
-
-
-												</select>
-											</div>
-										</div>
-
-									</div>
-
-									<div class="row gutters">
-										<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-											<div class="form-group">
-												<select class="form-control" name="cxtcre" required="true">
-													<option selected value="0">Seleccione método</option>
-													<option value="Credito pago">Crédito pago</option>
-													<option value="Tarjetas">Tarjetas</option>
-												</select>
-											</div>
-										</div>
+				<div class="row gutters">
+					<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+						<div class="table-container">
+							<div class="t-header">Reporte recepción</div>
+							<div class="documents-header">
 
 
 
-									</div>
+								<button onclick="descargarPDF()" class="btn btn-success">
+									<i class="fas fa-file-pdf"></i> Exportar a PDF
+								</button>
 
-									<button id="validate" name="order" type="submit" class="btn btn-primary float-right <?= ($cart_grand_total > 1) ? '' : 'disabled'; ?>">Guardar</button>
-									<button type="button" class="btn btn-danger float-right" onclick="location.href='cart.php'">Cancelar</button>
+								<button id="btnExportarExcel" class="btn btn-success">
+									<i class="fas fa-file-excel"></i> Exportar a Excel
+								</button>
 
-								</div>
 							</div>
-						</form>
+							<div class="table-responsive">
+
+								<?php
+								require_once('../../backend/config/Conexion.php');
+								$sentencia = $connect->prepare("SELECT
+								clientes.iddn,
+								clientes.nomc,
+								habitaciones.numiha,
+								habitaciones.detaha,
+								habitaciones.precha,
+								reservar.adel,
+								reservar.fecha_ingreso,
+								reservar.feentra,
+								reservar.fesal
+							FROM
+								reservar
+							JOIN clientes ON reservar.iddn = clientes.iddn
+							JOIN habitaciones ON reservar.idhab = habitaciones.idhab;
+							");
+								$sentencia->execute();
+								$data =  array();
+								if ($sentencia) {
+									while ($r = $sentencia->fetchObject()) {
+										$data[] = $r;
+									}
+								}
+								?>
+								<?php if (count($data) > 0) : ?>
+
+									<table id="tabla" class="table custom-table">
+										<thead>
+											<tr>
+												<th>Cliente</th>
+												<th>Número de la habitación</th>
+												<th>Detalle de la habitación</th>
+												<th>Precio de la habitación</th>
+												<th>Fecha de Reserva</th>
+												<th>Fecha de Ingreso</th>
+												<th>Fecha de Salida</th>
+											</tr>
+										</thead>
+
+										<tbody>
+											<?php foreach ($data as $d) : ?>
+												<tr>
+
+													<td><?php echo $d->nomc ?></td>
+													<td><?php echo $d->numiha ?></td>
+													<td><?php echo $d->detaha ?></td>
+													<td>S/.<?php echo $d->precha ?></td>
+													<td><?php echo $d->fecha_ingreso ?></td>
+													<td><?php echo $d->feentra ?></td>
+													<td><?php echo $d->fesal ?></td>
+													<td>
+														<button class="btn btn-success" onclick="imprimirRecibo(<?php echo $d->numiha ?>, '<?php echo $d->nomc ?>')">PDF</button>
+													</td>
+												</tr>
+
+											<?php endforeach; ?>
+										</tbody>
+
+									</table>
+								<?php else : ?>
+									<p class="alert alert-warning">No hay registros</p>
+								<?php endif; ?>
+							</div>
+						</div>
 					</div>
 				</div>
-				<!-- Row end -->
-
 			</div>
 
 			<!-- Main container end -->
@@ -386,6 +377,55 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] != 1) {
 	<!-- Page wrapper end -->
 
 	<!-- MODAL-ELIMINAR -->
+
+
+	<script>
+		// Función para imprimir el recibo en PDF
+		function imprimirRecibo(numeroHabitacion, nombreCliente) {
+			// Redirigir a la página PHP que genera el PDF
+			window.location.href = 'generar_pdf.php?numiha=' + numeroHabitacion + '&nomc=' + encodeURIComponent(nombreCliente);
+		}
+	</script>
+
+	<script>
+		const $btnExportarExcel = document.querySelector("#btnExportarExcel");
+		const $btnExportarPDF = document.querySelector("#btnExportarPDF");
+		const $tabla = document.querySelector("#tabla");
+
+		// Función para exportar a Excel
+		$btnExportarExcel.addEventListener("click", function() {
+			let tableExport = new TableExport($tabla, {
+				exportButtons: false,
+				filename: "Reporte Recepción",
+				sheetname: "Reporte Recepción",
+			});
+			let datos = tableExport.getExportData();
+			let preferenciasDocumento = datos.tabla.xlsx;
+			tableExport.export2file(preferenciasDocumento.data, preferenciasDocumento.mimeType, preferenciasDocumento.filename, preferenciasDocumento.fileExtension, preferenciasDocumento.merges, preferenciasDocumento.RTL, preferenciasDocumento.sheetname);
+		});
+
+		// Función para exportar a PDF
+		function descargarPDF() {
+			var elemento = document.getElementById('tabla');
+			var opt = {
+				margin: 1,
+				filename: 'tabla.pdf',
+				image: {
+					type: 'jpeg',
+					quality: 0.98
+				},
+				html2canvas: {
+					scale: 2
+				},
+				jsPDF: {
+					unit: 'pt',
+					format: 'a4',
+					orientation: 'portrait'
+				}
+			};
+			html2pdf().from(elemento).set(opt).save();
+		}
+	</script>
 
 
 	<!-- Required jQuery first, then Bootstrap Bundle JS -->
@@ -412,22 +452,8 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] != 1) {
 	<script src="../../backend/js/jquery.easing.1.3.js"></script>
 	<script src="../../backend/vendor/notify/notify.js"></script>
 	<script src="../../backend/vendor/notify/notify-custom.js"></script>
-	<?php
-	include_once '../../backend/php/add_check.php'
-	?>
-	<script src="../../backend/js/cli.js"></script>
-	<script>
-		$('#validate').click(function() {
 
-			if ($('#cxtcre').val().trim() === '') {
 
-				swal("Debe seleccionar una opción");
-
-			} else {
-				swal("Campos correctos");
-			}
-		});
-	</script>
 </body>
 
 </html>
