@@ -4,7 +4,12 @@ session_start();
 if (!isset($_SESSION['rol']) || $_SESSION['rol'] != 1) {
 	header('location: ../login.php');
 }
+
+date_default_timezone_set('America/Lima');
+
+$fechaActual = date('Y-m-d H:i:s');
 ?>
+
 <!doctype html>
 <html lang="es">
 
@@ -361,7 +366,7 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] != 1) {
 												<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
 													<div class="form-group">
 														<label for="addRess">Fecha entrada</label>
-														<input type="text" class="form-control" name="rxent" value="<?php $fechaActual = date('Y-m-d');
+														<input type="date" class="form-control" name="rxent" value="<?php $fechaActual = date('Y-m-d');
 																													echo $fechaActual; ?>">
 													</div>
 													<div class="form-group">
