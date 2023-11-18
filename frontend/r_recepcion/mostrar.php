@@ -356,6 +356,7 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] != 1) {
 													<th>Fecha de Reserva</th>
 													<th>Fecha de Ingreso</th>
 													<th>Fecha de Salida</th>
+													<th>Dias de Hospedados</th>
 												</tr>
 											</thead>
 
@@ -371,6 +372,7 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] != 1) {
 														<td><?php echo $d->fecha_ingreso ?></td>
 														<td><?php echo $d->feentra ?></td>
 														<td><?php echo $d->fesal ?></td>
+														<td><?php echo $d->duracion ?>días</td>
 													</tr>
 
 												<?php endforeach; ?>
@@ -435,6 +437,8 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] != 1) {
 													<th>Fecha de Reserva</th>
 													<th>Fecha de Ingreso</th>
 													<th>Fecha de Salida</th>
+													<th>Dias de Hospedados</th>
+													<th></th>
 												</tr>
 											</thead>
 
@@ -450,6 +454,7 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] != 1) {
 														<td><?php echo $d->fecha_ingreso ?></td>
 														<td><?php echo $d->feentra ?></td>
 														<td><?php echo $d->fesal ?></td>
+														<td><?php echo $d->duracion ?> días</td>
 														<td>
 															<button class="btn btn-success" onclick="imprimirRecibo(<?php echo $d->numiha ?>, '<?php echo $d->nomc ?>')">PDF</button>
 														</td>
