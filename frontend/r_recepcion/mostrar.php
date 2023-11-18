@@ -328,7 +328,8 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] != 1) {
 								reservar.adel,
 								reservar.fecha_ingreso,
 								reservar.feentra,
-								reservar.fesal
+								reservar.fesal,
+								reservar.duracion
 							FROM
 								reservar
 							JOIN clientes ON reservar.iddn = clientes.iddn
@@ -351,6 +352,7 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] != 1) {
 													<th>Número de la habitación</th>
 													<th>Detalle de la habitación</th>
 													<th>Precio de la habitación</th>
+													<th>Precio Total</th>
 													<th>Fecha de Reserva</th>
 													<th>Fecha de Ingreso</th>
 													<th>Fecha de Salida</th>
@@ -365,6 +367,7 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] != 1) {
 														<td><?php echo $d->numiha ?></td>
 														<td><?php echo $d->detaha ?></td>
 														<td>S/.<?php echo $d->precha ?></td>
+														<td>S/.<?php echo ($d->precha * $d->duracion)?></td>
 														<td><?php echo $d->fecha_ingreso ?></td>
 														<td><?php echo $d->feentra ?></td>
 														<td><?php echo $d->fesal ?></td>
@@ -404,7 +407,8 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] != 1) {
 								reservar.adel,
 								reservar.fecha_ingreso,
 								reservar.feentra,
-								reservar.fesal
+								reservar.fesal,
+								reservar.duracion
 							FROM
 								reservar
 							JOIN clientes ON reservar.iddn = clientes.iddn
@@ -427,6 +431,7 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] != 1) {
 													<th>Número de la habitación</th>
 													<th>Detalle de la habitación</th>
 													<th>Precio de la habitación</th>
+													<th>Precio Total</th>
 													<th>Fecha de Reserva</th>
 													<th>Fecha de Ingreso</th>
 													<th>Fecha de Salida</th>
@@ -441,6 +446,7 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] != 1) {
 														<td><?php echo $d->numiha ?></td>
 														<td><?php echo $d->detaha ?></td>
 														<td>S/.<?php echo $d->precha ?></td>
+														<td>S/.<?php echo ($d->precha * $d->duracion)?></td>
 														<td><?php echo $d->fecha_ingreso ?></td>
 														<td><?php echo $d->feentra ?></td>
 														<td><?php echo $d->fesal ?></td>

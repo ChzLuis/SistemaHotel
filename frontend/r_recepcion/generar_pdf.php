@@ -61,11 +61,28 @@ $pdf->SetFillColor(200, 220, 220); // Color de fondo
 $pdf->Cell(0, 20, utf8_decode('Recibo Hotel el Libertador'), 0, 1, 'C', true); // Con fondo
 
 
+
+$timestampEntrada = strtotime($d->feentra);
+$timestampSalida = strtotime($d->fesal);
+
+// Verificar si las conversiones fueron exitosas
+if ($timestampEntrada !== false && $timestampSalida !== false) {
+    // Calcular la diferencia en segundos y convertir a días
+    $diferenciaSegundos = $timestampSalida - $timestampEntrada;
+    $diferenciaDias = $diferenciaSegundos / (60 * 60 * 24);
+
+    // Obtener el precio y multiplicar por la diferencia en días
+    $precio = $d->precha;
+    $total = $precio * $diferenciaDias;
+} else {
+    // Mostrar un mensaje de error si hubo algún problema al convertir las fechas
+    echo "Error: Una o ambas fechas no son válidas.";
+}
 // Contenido del PDF
 $pdf->Cell(40, 10, utf8_decode('Cliente'), 1, 0, 'C', true);
 $pdf->Cell(25, 10, utf8_decode('Habitación'), 1, 0, 'C', true);
 $pdf->Cell(90, 10, utf8_decode('Detalle'), 1, 0, 'C', true);
-$pdf->Cell(30, 10, utf8_decode('Precio'), 1, 0, 'C', true);
+$pdf->Cell(30, 10, utf8_decode('Precio x Dia'), 1, 0, 'C', true);
 $pdf->Cell(30, 10, utf8_decode('Fecha Reserva'), 1, 0, 'C', true);
 $pdf->Cell(30, 10, utf8_decode('Fecha Ingreso'), 1, 0, 'C', true);
 $pdf->Cell(30, 10, utf8_decode('Fecha Salida'), 1, 1, 'C', true);
@@ -83,12 +100,15 @@ $pdf->Cell(0, 10, '', 0, 1);
 
 // Total y Monto
 $pdf->SetFont('Arial', 'B', 14);
-$pdf->Cell(40, 10, utf8_decode('Total'), 0, 0);
-$pdf->Cell(40, 10, utf8_decode('Monto'), 0, 1);
+$pdf->Cell(40, 10, utf8_decode('Monto a Pagar /.'.$total), 0, 1);
 $pdf->SetFont('Arial', '', 12);
 $pdf->Cell(40, 10, utf8_decode(''), 0, 0); // Celda vacía para Total
 $pdf->Cell(40, 10, utf8_decode(''), 0, 1); // Celda vacía para Monto
 
+// Pie de página
+$pdf->SetY(-15);
+$pdf->SetFont('Arial', 'I', 8);
+$pdf->Cell(0, 10, utf8_decode('Página ' . $pdf->PageNo()), 0, 0, 'C');
 
 // Nombre del archivo PDF
 $nombreArchivo = 'Recibo_Habitacion_' . $d->numiha . '.pdf';
